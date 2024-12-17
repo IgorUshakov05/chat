@@ -4,3 +4,8 @@
 body {
   font-family: var(--font-ubuntu), sans-serif;
 }
+
+button:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+} 
