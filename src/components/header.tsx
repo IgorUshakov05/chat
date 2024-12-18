@@ -13,10 +13,7 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import { FaGithub, FaTelegram } from "react-icons/fa";
-import {
-  Bars3Icon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
   LockClosedIcon,
@@ -68,7 +65,11 @@ const callsToAction = [
   },
 ];
 
-export default function Header() {
+interface HeaderProps {
+  isAuth: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ isAuth }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -168,7 +169,7 @@ export default function Header() {
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img alt="" src="/logo.png" className="h-8 h-8" />
+              <img alt="" src="/logo.png" className="h-8" />
             </a>
             <button
               type="button"
@@ -224,4 +225,6 @@ export default function Header() {
       </Dialog>
     </header>
   );
-}
+};
+
+export default Header;

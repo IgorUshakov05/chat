@@ -1,12 +1,11 @@
-
 import Header from "@/components/header";
-
+import Link from "next/link";
 export default function Join() {
   return (
     <>
-      <Header />
+      <Header isAuth={false} />
       <div className="bg-white">
-        <div className="mx-auto max-w-7xl py-0 mt-0 sm:px-6 lg:px-8">
+        <div className="mx-auto mt-0 max-w-7xl py-0 sm:px-6 lg:px-8">
           <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
             <svg
               viewBox="0 0 1024 1024"
@@ -29,23 +28,29 @@ export default function Join() {
             </svg>
             <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
               <h2 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                У вас уже есть учетная запись?
+                Добро пожаловать! Общайтесь легко и без ограничений
               </h2>
               <p className="mt-6 text-pretty text-lg/8 text-gray-300">
-                Войдите в свою учетную запись, чтобы продолжить использование нашего приложения.
+                Создайте собственный чат для обсуждений или присоединяйтесь к
+                уже существующим. Оставайтесь на связи с друзьями и коллегами в
+                удобном формате.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                <a
-                  href="/login"
+                <Link
+                  href="/invite"
                   className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   Войти
-                </a>
-                <a href="/registration" className="text-sm/6 font-semibold text-white">
-                  Регистрация <span aria-hidden="true">→</span>
-                </a>
+                </Link>
+                <Link
+                  href="/create"
+                  className="text-sm/6 font-semibold text-white"
+                >
+                  Создать чат <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </div>
+
             <div className="relative mt-16 h-80 lg:mt-8">
               <img
                 alt="App screenshot"

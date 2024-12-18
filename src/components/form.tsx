@@ -1,28 +1,19 @@
 import { observer } from "mobx-react-lite";
 import authStore from "../../store/authDataUser";
-import AuthUser from "../hooks/auth";
 import { useState } from "react";
-
+import Link from "next/link";
 const Form = observer(() => {
   let [isActivePassword, setActivePassword] = useState(false);
   let [isActiveLogin, setActiveLogin] = useState(false);
   async function registrationUser() {
     try {
       console.log(authStore.login, authStore.password);
-      let { success, error, user } = await AuthUser(
-        authStore.login,
-        authStore.password,
-      );
-      console.log({ success, error, user });
-      if (!success) {
-        authStore.setError("Пользователь уже существует!");
-        setActiveLogin(true);
-        setActivePassword(true);
-        return;
-      }
       authStore.setError("");
       setActiveLogin(false);
       setActivePassword(false);
+      // localStorage.setItem('access', )
+      // let userFromServer = sendAuthRequest();
+      // console.log(userFromServer);
     } catch (e) {
       console.error(e);
       authStore.setError("Ошибка при отправке!");
@@ -42,14 +33,14 @@ const Form = observer(() => {
 
   function PasswordChange(e: React.FormEvent<HTMLInputElement>) {
     let value = e.currentTarget.value;
-    const regex = /^.{4,100}$/; 
-    authStore.setPassword(value)
+    const regex = /^.{4,100}$/;
+    authStore.setPassword(value);
     if (regex.test(value)) {
       console.log("Строка длиннее или равна 4 символам");
       setActivePassword(false);
     } else {
       console.log("Строка слишком короткая");
-      setActivePassword(true); 
+      setActivePassword(true);
     }
   }
 
@@ -124,6 +115,14 @@ const Form = observer(() => {
         >
           Создать
         </button>
+        <Link
+          href={"/invite"}
+          style={{ marginTop: "10px" }}
+          type="submit"
+          className="text-balck flex w-full cursor-pointer justify-center rounded-md border border-black bg-white px-3 py-1.5 text-sm/6 font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Присоединиться к чату
+        </Link>
       </div>
     </div>
   );

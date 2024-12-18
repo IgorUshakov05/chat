@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Header from "@/components/header";
 import Langin from "@/components/langing";
@@ -6,7 +6,7 @@ import Langin from "@/components/langing";
 export default function Home() {
   return (
     <>
-      <Header />
+      <Header isAuth={false} />
       <Langin />
     </>
   );
