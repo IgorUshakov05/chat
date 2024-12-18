@@ -1,19 +1,38 @@
 import { observer } from "mobx-react-lite";
 import authStore from "../../store/authDataUser";
+import secretStore from "../../store/secretData";
 import { useState } from "react";
 import Link from "next/link";
+import registerUser from "../hooks/auth";
 const Form = observer(() => {
   let [isActivePassword, setActivePassword] = useState(false);
+  let [isLoad, setLoad] = useState(false);
   let [isActiveLogin, setActiveLogin] = useState(false);
   async function registrationUser() {
     try {
+      if(!authStore.login || !authStore.password) return false;
+      setLoad(true);
       console.log(authStore.login, authStore.password);
       authStore.setError("");
-      setActiveLogin(false);
-      setActivePassword(false);
-      // localStorage.setItem('access', )
-      // let userFromServer = sendAuthRequest();
-      // console.log(userFromServer);
+
+      let generateUUID = await registerUser(
+        authStore.login,
+        authStore.password,
+      );
+      if (!generateUUID.success) {
+        authStore.setError("Ошибка при создании чата");
+        setActiveLogin(true);
+        setActivePassword(true);
+        authStore.setLogin("");
+        authStore.setPassword("");
+      }
+
+      setLoad(false);
+      if (generateUUID.id) {
+        secretStore.setPassword(authStore.password);
+        secretStore.setUuidRoom(generateUUID.id);
+        console.log(generateUUID);
+      }
     } catch (e) {
       console.error(e);
       authStore.setError("Ошибка при отправке!");
@@ -31,6 +50,7 @@ const Form = observer(() => {
     return setActiveLogin(true);
   }
 
+ 
   function PasswordChange(e: React.FormEvent<HTMLInputElement>) {
     let value = e.currentTarget.value;
     const regex = /^.{4,100}$/;
@@ -86,7 +106,7 @@ const Form = observer(() => {
             htmlFor="password"
             className="block text-sm/6 font-medium text-gray-900"
           >
-            Пароль: {isActivePassword ? "True" : "False"}
+            Пароль чата
           </label>
         </div>
         <div className="mt-2">
@@ -108,12 +128,35 @@ const Form = observer(() => {
 
       <div>
         <button
-          disabled={isActivePassword || isActiveLogin}
+          disabled={isActivePassword || isActiveLogin || isLoad}
           onClick={registrationUser}
           type="submit"
           className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Создать
+          {isLoad ? (
+            <svg
+              className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          ) : (
+            "Создать"
+          )}
         </button>
         <Link
           href={"/invite"}
@@ -125,6 +168,7 @@ const Form = observer(() => {
         </Link>
       </div>
     </div>
+
   );
 });
 

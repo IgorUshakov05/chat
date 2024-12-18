@@ -1,31 +1,28 @@
 "use client";
+import axios from "axios";
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../lib/firebase"; // Импортируем app
 interface AuthResult {
   success: boolean;
-  user?: any;
-  error?: string;
+  id?: string;
 }
-
-// Сделаем функцию асинхронной
+interface ResultFunctiomAuth extends AuthResult {}
 const registerUser = async (
-  email: string,
+  login: string,
   password: string,
-): Promise<AuthResult> => {
+): Promise<ResultFunctiomAuth> => {
   try {
-    const auth = getAuth(app); // Используем app из lib/firebase.ts
-    const createUser = await createUserWithEmailAndPassword(
-      auth,
-      email + "@webhunt.ru",
-      password,
+    let sendData = await axios.post<AuthResult>(
+      `${process.env.server}/generate`,
+      {
+        login,
+        password,
+      },
     );
-    console.log("Login: ", email);
-    console.log("Password: ", password);
-    const user = createUser.user;
-    return { success: true, user };
+    let { id, success } = sendData.data;
+    console.log(sendData.data);
+    return { success, id };
   } catch (error: any) {
-    return { success: false, error:error.message };
+    return { success: false };
   }
 };
 

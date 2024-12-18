@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  env: {
+    client: "http://localhost:3000",
+    server: "http://localhost:4000",
+  },
 };
 
 export default nextConfig;

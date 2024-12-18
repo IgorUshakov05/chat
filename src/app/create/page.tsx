@@ -1,6 +1,9 @@
 "use client";
 import Form from "@/components/form";
-export default function Registration() {
+import { observer } from "mobx-react-lite";
+import ShareLink from "@/components/shareLink";
+import secretStore from "../../../store/secretData";
+const Registration = observer(() => {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -14,9 +17,12 @@ export default function Registration() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <Form />
+          {secretStore.uuidRoom ? <ShareLink /> : <Form />}
         </div>
       </div>
     </>
   );
-}
+})
+
+
+export default Registration
