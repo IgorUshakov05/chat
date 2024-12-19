@@ -9,3 +9,12 @@ button:disabled{
   opacity: 0.6;
   cursor: not-allowed;
 } 
+
+.hidden-scrollbar {
+  overflow-y: scroll; /* Включаем прокрутку */
+  scrollbar-width: none; /* Для Firefox */
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none; /* Для Chrome, Safari */
+}

@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   env: {
     client: "http://localhost:3000",
     server: "http://localhost:4000",
+    ws: "localhost:4000",
   },
 };
 

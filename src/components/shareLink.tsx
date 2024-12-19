@@ -1,13 +1,10 @@
 import secretStore from "../../store/secretData";
 import { useState } from "react";
 import Link from "next/link";
-import authStore from "../../store/authDataUser";
 export default function ShareLink() {
   function copyURL() {
     navigator.clipboard
-      .writeText(
-        `${process.env.client}/room?id=${secretStore.uuidRoom}&password=${secretStore.password}`,
-      )
+      .writeText(`${process.env.client}/room?id=${secretStore.uuidRoom}`)
       .then(
         () => {
           setIsCopied(true);
@@ -41,7 +38,7 @@ export default function ShareLink() {
         </span>
       </button>
       <Link
-        href={`${process.env.client}/room?id=${secretStore.uuidRoom}&password=${secretStore.password}`}
+        href={`${process.env.client}/room?id=${secretStore.uuidRoom}`}
         style={{ marginTop: "10px" }}
         type="submit"
         className="text-balck flex w-full cursor-pointer justify-center rounded-md border border-black bg-white px-3 py-1.5 text-sm/6 font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
