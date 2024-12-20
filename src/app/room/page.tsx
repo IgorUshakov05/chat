@@ -6,19 +6,35 @@ import { v4 as uuidv4 } from "uuid";
 import { WebSocketProvider } from "@/components/WebSocketChat";
 import authStore from "../../../store/authDataUser";
 import InputMessage from "../../components/inputMessage";
-import { useEffect, createContext } from "react";
+import { useEffect } from "react";
+import secretStore from "../../../store/secretData";
 function Room() {
   useEffect(() => {
     let myID = localStorage.getItem("myID");
-
+    let login = localStorage.getItem("login");
+    let loginOfStore = authStore.login;
+    if (loginOfStore) {
+      localStorage.setItem("login", loginOfStore);
+    }
+    if (!loginOfStore && login) {
+      authStore.setLogin(login);
+    }
     if (!myID) {
-      let newID = uuidv4().toString();
+      const newID = uuidv4();
       localStorage.setItem("myID", newID);
       authStore.setMyId(newID);
     } else {
-      authStore.setMyId(myID); // Используем существующий ID
+      authStore.setMyId(myID);
     }
-  }, []);
+
+    const chatID = localStorage.getItem("chatID");
+    if (!chatID) {
+      localStorage.setItem("chatID", secretStore.uuidRoom);
+    } else {
+      secretStore.setUuidRoom(chatID);
+    }
+    
+  }, [authStore, secretStore]);
 
   return (
     <WebSocketProvider>

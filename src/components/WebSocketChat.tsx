@@ -9,12 +9,15 @@ interface WebSocketContextType {
     login: string,
     message: string,
   ) => void;
+
+  join: (userID: string, chatID: string) => {success: boolean };
 }
 interface MessageFromServer {
   userID: string;
-  chatID: string;
-  login: string;
-  message: string;
+  chanel: string;
+  chatID?: string;
+  login?: string;
+  message?: string;
 }
 export const WebSocketContext = createContext<WebSocketContextType | null>(
   null,
@@ -39,10 +42,20 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
     newSocket.onmessage = (event) => {
       try {
         let serverMessage = event.data;
-        let { message, userID, login }: MessageFromServer =
+        console.log(serverMessage);
+        let { message, userID, login, chanel }: MessageFromServer =
           JSON.parse(serverMessage);
-        console.log("Сообщение от сервера:", { message, userID, login });
-        currentRoom.addMessage(login, message, userID);
+        console.log("Сообщение от сервера:", {
+          message,
+          userID,
+          login,
+          chanel,
+        });
+        if (chanel === "/message") {
+          if (login && message && userID) {
+            currentRoom.addMessage(login, message, userID);
+          }
+        }
       } catch (e) {
         return;
       }
@@ -58,7 +71,12 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
       newSocket.close();
     };
   }, []);
-
+  const join = (userID: string, chatID: string) => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      const data = JSON.stringify({ userID, chatID, chanel: "/join-chat" });
+      socket.send(data);
+    }
+  };
   const sendMessage = (
     message: string,
     userID: String,
@@ -67,13 +85,19 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
   ) => {
     // if (!message || !chatID || !userID) return;
     if (socket && socket.readyState === WebSocket.OPEN) {
-      const data = JSON.stringify({ message, userID, chatID, login });
+      const data = JSON.stringify({
+        message,
+        userID,
+        chatID,
+        login,
+        chanel: "/message",
+      });
       socket.send(data);
     }
   };
 
   return (
-    <WebSocketContext.Provider value={{ socket, sendMessage }}>
+    <WebSocketContext.Provider value={{ socket, sendMessage, join }}>
       {children}
     </WebSocketContext.Provider>
   );

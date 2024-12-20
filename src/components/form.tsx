@@ -10,15 +10,12 @@ const Form = observer(() => {
   let [isActiveLogin, setActiveLogin] = useState(false);
   async function registrationUser() {
     try {
-      if(!authStore.login || !authStore.password) return false;
+      if (!authStore.login || !authStore.password) return false;
       setLoad(true);
       console.log(authStore.login, authStore.password);
       authStore.setError("");
-
-      let generateUUID = await registerUser(
-        authStore.login,
-        authStore.password,
-      );
+      alert(`${authStore.login} ${authStore.myID}`);
+      let generateUUID = await registerUser();
       if (!generateUUID.success) {
         authStore.setError("Ошибка при создании чата");
         setActiveLogin(true);
@@ -50,7 +47,6 @@ const Form = observer(() => {
     return setActiveLogin(true);
   }
 
- 
   function PasswordChange(e: React.FormEvent<HTMLInputElement>) {
     let value = e.currentTarget.value;
     const regex = /^.{4,100}$/;
@@ -168,7 +164,6 @@ const Form = observer(() => {
         </Link>
       </div>
     </div>
-
   );
 });
 
