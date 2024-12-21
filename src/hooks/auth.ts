@@ -19,4 +19,5 @@ const registerUser = async (): Promise<ResultFunctiomAuth> => {
   }
 };
 
+
 export default registerUser;
